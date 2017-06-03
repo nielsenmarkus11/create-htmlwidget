@@ -1,0 +1,863 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="generator" content="pandoc">
+  <title></title>
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+  <link rel="stylesheet" href="create-htmlwidget_files/reveal.js-3.3.0.1/css/reveal.css"/>
+
+
+<style type="text/css">
+div.sourceCode { overflow-x: auto; }
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+  margin: 0; padding: 0; vertical-align: baseline; border: none; }
+table.sourceCode { width: 100%; line-height: 100%; background-color: #f8f8f8; }
+td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
+td.sourceCode { padding-left: 5px; }
+pre, code { background-color: #f8f8f8; }
+code > span.kw { color: #204a87; font-weight: bold; } /* Keyword */
+code > span.dt { color: #204a87; } /* DataType */
+code > span.dv { color: #0000cf; } /* DecVal */
+code > span.bn { color: #0000cf; } /* BaseN */
+code > span.fl { color: #0000cf; } /* Float */
+code > span.ch { color: #4e9a06; } /* Char */
+code > span.st { color: #4e9a06; } /* String */
+code > span.co { color: #8f5902; font-style: italic; } /* Comment */
+code > span.ot { color: #8f5902; } /* Other */
+code > span.al { color: #ef2929; } /* Alert */
+code > span.fu { color: #000000; } /* Function */
+code > span.er { color: #a40000; font-weight: bold; } /* Error */
+code > span.wa { color: #8f5902; font-weight: bold; font-style: italic; } /* Warning */
+code > span.cn { color: #000000; } /* Constant */
+code > span.sc { color: #000000; } /* SpecialChar */
+code > span.vs { color: #4e9a06; } /* VerbatimString */
+code > span.ss { color: #4e9a06; } /* SpecialString */
+code > span.im { } /* Import */
+code > span.va { color: #000000; } /* Variable */
+code > span.cf { color: #204a87; font-weight: bold; } /* ControlFlow */
+code > span.op { color: #ce5c00; font-weight: bold; } /* Operator */
+code > span.pp { color: #8f5902; font-style: italic; } /* Preprocessor */
+code > span.ex { } /* Extension */
+code > span.at { color: #c4a000; } /* Attribute */
+code > span.do { color: #8f5902; font-weight: bold; font-style: italic; } /* Documentation */
+code > span.an { color: #8f5902; font-weight: bold; font-style: italic; } /* Annotation */
+code > span.cv { color: #8f5902; font-weight: bold; font-style: italic; } /* CommentVar */
+code > span.in { color: #8f5902; font-weight: bold; font-style: italic; } /* Information */
+</style>
+
+<link rel="stylesheet" href="create-htmlwidget_files/reveal.js-3.3.0.1/css/theme/moon.css" id="theme">
+
+<style type="text/css">
+.reveal section img {
+  background: rgba(255, 255, 255, 0.85);
+}
+</style>
+
+  <!-- some tweaks to reveal css -->
+  <style type="text/css">
+    .reveal h1 { font-size: 2.0em; }
+    .reveal h2 { font-size: 1.5em;  }
+    .reveal h3 { font-size: 1.25em;	}
+    .reveal h4 { font-size: 1em;	}
+
+    .reveal .slides>section,
+    .reveal .slides>section>section {
+      padding: 0px 0px;
+    }
+
+
+
+    .reveal table {
+      border-width: 1px;
+      border-spacing: 2px;
+      border-style: dotted;
+      border-color: gray;
+      border-collapse: collapse;
+      font-size: 0.7em;
+    }
+
+    .reveal table th {
+      border-width: 1px;
+      padding-left: 10px;
+      padding-right: 25px;
+      font-weight: bold;
+      border-style: dotted;
+      border-color: gray;
+    }
+
+    .reveal table td {
+      border-width: 1px;
+      padding-left: 10px;
+      padding-right: 25px;
+      border-style: dotted;
+      border-color: gray;
+    }
+
+
+  </style>
+
+    <style type="text/css">code{white-space: pre;}</style>
+
+
+<!-- Printing and PDF exports -->
+<script id="paper-css" type="application/dynamic-css">
+
+/* Default Print Stylesheet Template
+   by Rob Glazebrook of CSSnewbie.com
+   Last Updated: June 4, 2008
+
+   Feel free (nay, compelled) to edit, append, and
+   manipulate this file as you see fit. */
+
+
+@media print {
+
+	/* SECTION 1: Set default width, margin, float, and
+	   background. This prevents elements from extending
+	   beyond the edge of the printed page, and prevents
+	   unnecessary background images from printing */
+	html {
+		background: #fff;
+		width: auto;
+		height: auto;
+		overflow: visible;
+	}
+	body {
+		background: #fff;
+		font-size: 20pt;
+		width: auto;
+		height: auto;
+		border: 0;
+		margin: 0 5%;
+		padding: 0;
+		overflow: visible;
+		float: none !important;
+	}
+
+	/* SECTION 2: Remove any elements not needed in print.
+	   This would include navigation, ads, sidebars, etc. */
+	.nestedarrow,
+	.controls,
+	.fork-reveal,
+	.share-reveal,
+	.state-background,
+	.reveal .progress,
+	.reveal .backgrounds {
+		display: none !important;
+	}
+
+	/* SECTION 3: Set body font face, size, and color.
+	   Consider using a serif font for readability. */
+	body, p, td, li, div {
+		font-size: 20pt!important;
+		font-family: Georgia, "Times New Roman", Times, serif !important;
+		color: #000;
+	}
+
+	/* SECTION 4: Set heading font face, sizes, and color.
+	   Differentiate your headings from your body text.
+	   Perhaps use a large sans-serif for distinction. */
+	h1,h2,h3,h4,h5,h6 {
+		color: #000!important;
+		height: auto;
+		line-height: normal;
+		font-family: Georgia, "Times New Roman", Times, serif !important;
+		text-shadow: 0 0 0 #000 !important;
+		text-align: left;
+		letter-spacing: normal;
+	}
+	/* Need to reduce the size of the fonts for printing */
+	h1 { font-size: 28pt !important;  }
+	h2 { font-size: 24pt !important; }
+	h3 { font-size: 22pt !important; }
+	h4 { font-size: 22pt !important; font-variant: small-caps; }
+	h5 { font-size: 21pt !important; }
+	h6 { font-size: 20pt !important; font-style: italic; }
+
+	/* SECTION 5: Make hyperlinks more usable.
+	   Ensure links are underlined, and consider appending
+	   the URL to the end of the link for usability. */
+	a:link,
+	a:visited {
+		color: #000 !important;
+		font-weight: bold;
+		text-decoration: underline;
+	}
+	/*
+	.reveal a:link:after,
+	.reveal a:visited:after {
+		content: " (" attr(href) ") ";
+		color: #222 !important;
+		font-size: 90%;
+	}
+	*/
+
+
+	/* SECTION 6: more reveal.js specific additions by @skypanther */
+	ul, ol, div, p {
+		visibility: visible;
+		position: static;
+		width: auto;
+		height: auto;
+		display: block;
+		overflow: visible;
+		margin: 0;
+		text-align: left !important;
+	}
+	.reveal pre,
+	.reveal table {
+		margin-left: 0;
+		margin-right: 0;
+	}
+	.reveal pre code {
+		padding: 20px;
+		border: 1px solid #ddd;
+	}
+	.reveal blockquote {
+		margin: 20px 0;
+	}
+	.reveal .slides {
+		position: static !important;
+		width: auto !important;
+		height: auto !important;
+
+		left: 0 !important;
+		top: 0 !important;
+		margin-left: 0 !important;
+		margin-top: 0 !important;
+		padding: 0 !important;
+		zoom: 1 !important;
+
+		overflow: visible !important;
+		display: block !important;
+
+		text-align: left !important;
+		-webkit-perspective: none;
+		   -moz-perspective: none;
+		    -ms-perspective: none;
+		        perspective: none;
+
+		-webkit-perspective-origin: 50% 50%;
+		   -moz-perspective-origin: 50% 50%;
+		    -ms-perspective-origin: 50% 50%;
+		        perspective-origin: 50% 50%;
+	}
+	.reveal .slides section {
+		visibility: visible !important;
+		position: static !important;
+		width: auto !important;
+		height: auto !important;
+		display: block !important;
+		overflow: visible !important;
+
+		left: 0 !important;
+		top: 0 !important;
+		margin-left: 0 !important;
+		margin-top: 0 !important;
+		padding: 60px 20px !important;
+		z-index: auto !important;
+
+		opacity: 1 !important;
+
+		page-break-after: always !important;
+
+		-webkit-transform-style: flat !important;
+		   -moz-transform-style: flat !important;
+		    -ms-transform-style: flat !important;
+		        transform-style: flat !important;
+
+		-webkit-transform: none !important;
+		   -moz-transform: none !important;
+		    -ms-transform: none !important;
+		        transform: none !important;
+
+		-webkit-transition: none !important;
+		   -moz-transition: none !important;
+		    -ms-transition: none !important;
+		        transition: none !important;
+	}
+	.reveal .slides section.stack {
+		padding: 0 !important;
+	}
+	.reveal section:last-of-type {
+		page-break-after: avoid !important;
+	}
+	.reveal section .fragment {
+		opacity: 1 !important;
+		visibility: visible !important;
+
+		-webkit-transform: none !important;
+		   -moz-transform: none !important;
+		    -ms-transform: none !important;
+		        transform: none !important;
+	}
+	.reveal section img {
+		display: block;
+		margin: 15px 0px;
+		background: rgba(255,255,255,1);
+		border: 1px solid #666;
+		box-shadow: none;
+	}
+
+	.reveal section small {
+		font-size: 0.8em;
+	}
+
+}  
+</script>
+
+
+<script id="pdf-css" type="application/dynamic-css">
+    
+/**
+ * This stylesheet is used to print reveal.js
+ * presentations to PDF.
+ *
+ * https://github.com/hakimel/reveal.js#pdf-export
+ */
+
+* {
+	-webkit-print-color-adjust: exact;
+}
+
+body {
+	margin: 0 auto !important;
+	border: 0;
+	padding: 0;
+	float: none !important;
+	overflow: visible;
+}
+
+html {
+	width: 100%;
+	height: 100%;
+	overflow: visible;
+}
+
+/* Remove any elements not needed in print. */
+.nestedarrow,
+.reveal .controls,
+.reveal .progress,
+.reveal .playback,
+.reveal.overview,
+.fork-reveal,
+.share-reveal,
+.state-background {
+	display: none !important;
+}
+
+h1, h2, h3, h4, h5, h6 {
+	text-shadow: 0 0 0 #000 !important;
+}
+
+.reveal pre code {
+	overflow: hidden !important;
+	font-family: Courier, 'Courier New', monospace !important;
+}
+
+ul, ol, div, p {
+	visibility: visible;
+	position: static;
+	width: auto;
+	height: auto;
+	display: block;
+	overflow: visible;
+	margin: auto;
+}
+.reveal {
+	width: auto !important;
+	height: auto !important;
+	overflow: hidden !important;
+}
+.reveal .slides {
+	position: static;
+	width: 100%;
+	height: auto;
+
+	left: auto;
+	top: auto;
+	margin: 0 !important;
+	padding: 0 !important;
+
+	overflow: visible;
+	display: block;
+
+	-webkit-perspective: none;
+	   -moz-perspective: none;
+	    -ms-perspective: none;
+	        perspective: none;
+
+	-webkit-perspective-origin: 50% 50%; /* there isn't a none/auto value but 50-50 is the default */
+	   -moz-perspective-origin: 50% 50%;
+	    -ms-perspective-origin: 50% 50%;
+	        perspective-origin: 50% 50%;
+}
+
+.reveal .slides section {
+	page-break-after: always !important;
+
+	visibility: visible !important;
+	position: relative !important;
+	display: block !important;
+	position: relative !important;
+
+	margin: 0 !important;
+	padding: 0 !important;
+	box-sizing: border-box !important;
+	min-height: 1px;
+
+	opacity: 1 !important;
+
+	-webkit-transform-style: flat !important;
+	   -moz-transform-style: flat !important;
+	    -ms-transform-style: flat !important;
+	        transform-style: flat !important;
+
+	-webkit-transform: none !important;
+	   -moz-transform: none !important;
+	    -ms-transform: none !important;
+	        transform: none !important;
+}
+
+.reveal section.stack {
+	margin: 0 !important;
+	padding: 0 !important;
+	page-break-after: avoid !important;
+	height: auto !important;
+	min-height: auto !important;
+}
+
+.reveal img {
+	box-shadow: none;
+}
+
+.reveal .roll {
+	overflow: visible;
+	line-height: 1em;
+}
+
+/* Slide backgrounds are placed inside of their slide when exporting to PDF */
+.reveal section .slide-background {
+	display: block !important;
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	z-index: -1;
+}
+
+/* All elements should be above the slide-background */
+.reveal section>* {
+	position: relative;
+	z-index: 1;
+}
+
+/* Display slide speaker notes when 'showNotes' is enabled */
+.reveal .speaker-notes-pdf {
+	display: block;
+	width: 100%;
+	max-height: none;
+	left: auto;
+	top: auto;
+	z-index: 100;
+}
+
+/* Display slide numbers when 'slideNumber' is enabled */
+.reveal .slide-number-pdf {
+	display: block;
+	position: absolute;
+	font-size: 14px;
+}
+
+</script>
+
+
+<script>
+var style = document.createElement( 'style' );
+style.type = 'text/css';
+var style_script_id = window.location.search.match( /print-pdf/gi ) ? 'pdf-css' : 'paper-css';
+var style_script = document.getElementById(style_script_id).text;
+style.innerHTML = style_script;
+document.getElementsByTagName('head')[0].appendChild(style);
+</script>
+
+    <script src="create-htmlwidget_files/htmlwidgets-0.8/htmlwidgets.js"></script>
+    <script src="create-htmlwidget_files/mywidget-binding-0.0.0.9000/mywidget.js"></script>
+    <script src="create-htmlwidget_files/d3-3/d3.v3.min.js"></script>
+    <link href="create-htmlwidget_files/hive-0.1/hive.css" rel="stylesheet" />
+    <script src="create-htmlwidget_files/hive-0.1/d3.hive.min.js"></script>
+    <script src="create-htmlwidget_files/hive_no_int-binding-0.0.0.9000/hive_no_int.js"></script>
+    <script src="create-htmlwidget_files/hive-binding-0.0.0.9000/hive.js"></script>
+</head>
+<body>
+  <div class="reveal">
+    <div class="slides">
+
+
+<section class="slide level2">
+
+<section class="present">
+<h1 class="title">
+Creating custom htmlwidgets for shiny
+</h1>
+<h2 class="author">
+Mark Nielsen
+</h2>
+<aside class="notes">
+<ul>
+<li>Introduce yourself: USU, BYU, Merrick, now IHC.</li>
+<li>SAS, R, Web Development, finally shiny.</li>
+<li>htmlwidgets a mystery, started to understand, previously used <code>rCharts</code>.</li>
+<li>Training Garrett Grolemund recommended that I look into <code>htmlwidgets</code>.</li>
+</ul>
+</aside>
+</section>
+</section>
+<section id="section" class="slide level2">
+<h1></h1>
+<section class="titleslide level1">
+<h1>
+Setting Up the HTMLWidget
+</h1>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">devtools::<span class="kw">create</span>(<span class="st">&quot;mywidget&quot;</span>)
+<span class="kw">setwd</span>(<span class="st">&quot;mywidget&quot;</span>)
+htmlwidgets::<span class="kw">scaffoldWidget</span>(<span class="st">&quot;mywidget&quot;</span>)
+devtools::<span class="kw">install</span>()</code></pre></div>
+<p>To learn more, see Ramnath V., Kenton R., and Rstudio’s <a href="http://www.htmlwidgets.org/develop_intro.html">tutorial</a> on creating htmlwidgets.</p>
+<aside class="notes">
+<ul>
+<li>Ready to create your first htmlwidget?</li>
+<li>Ramnath Vaidyanathan (rCharts), Kenton Russell, and RStudio</li>
+<li>Increadible tutorial.</li>
+</ul>
+</aside>
+</section>
+<section id="file-structure" class="slide level2">
+<h1>File Structure</h1>
+<pre><code>
+.
+├── DESCRIPTION
+├── inst
+│   └── htmlwidgets
+│       ├── mywidget.js
+│       └── mywidget.yaml
+├── mywidget.Rproj
+├── NAMESPACE
+└── R
+    └── mywidget.R
+</code></pre>
+<aside class="notes">
+<ul>
+<li><b>DEMO:</b> Look at file structure in RStudio</li>
+</ul>
+</aside>
+</section>
+<section id="r-output" class="slide level2">
+<h1>R output</h1>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(mywidget)
+<span class="kw">mywidget</span>(<span class="st">&quot;Hello World&quot;</span>)</code></pre></div>
+<div id="htmlwidget-958153543196e87e0325" style="width:768px;height:576px;" class="mywidget html-widget"></div>
+<script type="application/json" data-for="htmlwidget-958153543196e87e0325">{"x":{"message":"Hello World"},"evals":[],"jsHooks":[]}</script>
+<aside class="notes">
+<ul>
+<li>Vioala! Your first htmlwidget AND the classic “Hello World”.</li>
+<li>Pat yourself on the back.</li>
+<li>We can go home!</li>
+<li><b>DEMO:</b> Let’s dig into the code.</li>
+</ul>
+</aside>
+</section>
+</section>
+<section id="section-1" class="slide level2">
+<h1></h1>
+<section class="titleslide level1">
+<h1>
+Adding the JS Code
+</h1>
+<ol type="1">
+<li>Find or develop the JS code you want to bind to R.</li>
+<li>Replace JS code in <code>./inst/htmlwidgets/hive.js</code></li>
+<li>Copy supporting JS and CSS into <code>./inst/htmlwidgets/lib/</code> folder.</li>
+<li>Define dependencies in <code>./inst/htmlwidgets/hive.yaml</code></li>
+</ol>
+<aside class="notes">
+<ul>
+<li>Okay, maybe not so cool, but we can do better.</li>
+<li>Find some JS code (I’m not a Web Developer)</li>
+</ul>
+</aside>
+</section>
+<section id="enter-hive-plots" class="slide level2">
+<h1>Enter hive plots</h1>
+<ul>
+<li>Like the functionality and look of Mike Bostock’s D3 implementation of <a href="https://bost.ocks.org/mike/hive/">hive plots</a>.</li>
+<li>A simpler version is found <a href="https://bl.ocks.org/mbostock/2066415">here</a>.</li>
+</ul>
+<aside class="notes">
+<ul>
+<li>Martin Krzysinski credited with hive plot.</li>
+<li><b>DEMO:</b> Pull code up in R and show how I split it up</li>
+</ul>
+</aside>
+</section>
+</section>
+<section id="section-2" class="slide level2">
+<h1></h1>
+<section class="titleslide level1">
+<h1>
+Create the Bindings
+</h1>
+Goal: Get R data to look just like this.
+<pre>
+<code class="hljs" data-trim>
+var nodes = [
+  {x: 0, y: .1},
+  {x: 0, y: .9},
+  {x: 1, y: .2},
+  {x: 1, y: .3},
+  {x: 2, y: .1},
+  {x: 2, y: .8}
+];
+var links = [
+  {source: nodes[0], target: nodes[2]},
+  {source: nodes[1], target: nodes[3]},
+  {source: nodes[2], target: nodes[4]},
+  {source: nodes[2], target: nodes[5]},
+  {source: nodes[3], target: nodes[5]},
+  {source: nodes[4], target: nodes[0]},
+  {source: nodes[5], target: nodes[1]}
+];
+</code>
+</pre>
+<aside class="notes">
+<ul>
+<li>Now the tricky part…</li>
+<li>Get my R dataframe to look like this.</li>
+</ul>
+</aside>
+</section>
+<section id="r-code" class="slide level2">
+<h1>R Code</h1>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">hive &lt;-<span class="st"> </span>function(nodes, 
+                 links, 
+                 <span class="dt">innerRadius=</span><span class="dv">40</span>, 
+                 <span class="dt">outerRadius =</span> <span class="dv">240</span>, 
+                 <span class="dt">opacity=</span><span class="fl">0.7</span>, 
+                 <span class="dt">width =</span> <span class="ot">NULL</span>, 
+                 <span class="dt">height =</span> <span class="ot">NULL</span>, 
+                 <span class="dt">elementId =</span> <span class="ot">NULL</span>) {
+
+  <span class="co"># sort in order of node id</span>
+  if(<span class="st">&quot;id&quot;</span> %in%<span class="st"> </span><span class="kw">colnames</span>(nodes)) {
+    nodes &lt;-<span class="st"> </span>nodes[<span class="kw">order</span>(nodes$id),]
+    nodes$id &lt;-<span class="st"> </span><span class="ot">NULL</span>
+  }
+
+  <span class="co"># color by axis if no coloring is supplied</span>
+  if(!(<span class="st">&quot;color&quot;</span> %in%<span class="st"> </span><span class="kw">colnames</span>(nodes))) {
+    nodes$color &lt;-<span class="st"> </span>nodes$x
+  }
+
+  <span class="co"># forward options using x</span>
+  x =<span class="st"> </span><span class="kw">list</span>(
+    <span class="dt">nodes =</span> nodes,
+    <span class="dt">links =</span> links,
+    <span class="dt">numAxis =</span> <span class="kw">max</span>(nodes$x)+<span class="dv">1</span>,
+    <span class="dt">options =</span> <span class="kw">list</span>(<span class="dt">innerRadius=</span>innerRadius,
+                   <span class="dt">outerRadius=</span>outerRadius,
+                   <span class="dt">opacity=</span>opacity)
+  )
+
+  <span class="co"># create widget</span>
+  htmlwidgets::<span class="kw">createWidget</span>(
+    <span class="dt">name =</span> <span class="st">&#39;hive&#39;</span>,
+    x,
+    <span class="dt">width =</span> width,
+    <span class="dt">height =</span> height,
+    <span class="dt">package =</span> <span class="st">&#39;hiveD3&#39;</span>,
+    <span class="dt">elementId =</span> elementId
+  )
+}</code></pre></div>
+<aside class="notes">
+<ul>
+<li>Now the tricky part…</li>
+<li>Get my R dataframe to look like this.</li>
+</ul>
+</aside>
+</section>
+<section id="htmlwidgets" class="slide level2">
+<h1>htmlwidgets</h1>
+<pre>
+<code class="hljs" data-trim>
+// convert links and nodes data frames to d3 friendly format
+var nodes = HTMLWidgets.dataframeToD3(x.nodes);
+var prelinks = HTMLWidgets.dataframeToD3(x.links);
+
+// create json of link sources and targets
+var links = [];
+prelinks.forEach(function(d){
+  var tmp = {};
+  tmp.source=nodes[d.source];
+  tmp.target=nodes[d.target];
+  links.push(tmp);
+});
+</code>
+</pre>
+<aside class="notes">
+<ul>
+<li>Okay, not so bad.</li>
+<li>Recreating nodes is easy.</li>
+<li>Don’t want to touch js code much… make dat exact</li>
+<li>Need to loop through each prelink and create links</li>
+</ul>
+</aside>
+</section>
+</section>
+<section id="section-3" class="slide level2">
+<h1></h1>
+<section class="titleslide level1">
+<h1>
+Putting it all together
+</h1>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(hiveD3)
+nodes =<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">id=</span><span class="kw">c</span>(<span class="dv">0</span>,<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">3</span>,<span class="dv">4</span>,<span class="dv">5</span>,<span class="dv">6</span>,<span class="dv">7</span>,<span class="dv">8</span>),
+                   <span class="dt">x=</span><span class="kw">c</span>(<span class="dv">0</span>,<span class="dv">0</span>,<span class="dv">1</span>,<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">2</span>,<span class="dv">3</span>,<span class="dv">3</span>,<span class="dv">4</span>), 
+                   <span class="dt">y=</span><span class="kw">c</span>(.<span class="dv">1</span>,.<span class="dv">9</span>,.<span class="dv">2</span>,.<span class="dv">3</span>,.<span class="dv">1</span>,.<span class="dv">8</span>,.<span class="dv">3</span>,.<span class="dv">5</span>,.<span class="dv">9</span>))
+links =<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">source=</span><span class="kw">c</span>(<span class="dv">0</span>,<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">2</span>,<span class="dv">3</span>,<span class="dv">4</span>,<span class="dv">5</span>,<span class="dv">6</span>,<span class="dv">7</span>,<span class="dv">8</span>,<span class="dv">8</span>),
+                   <span class="dt">target=</span><span class="kw">c</span>(<span class="dv">2</span>,<span class="dv">3</span>,<span class="dv">4</span>,<span class="dv">5</span>,<span class="dv">5</span>,<span class="dv">6</span>,<span class="dv">7</span>,<span class="dv">8</span>,<span class="dv">8</span>,<span class="dv">0</span>,<span class="dv">1</span>))
+
+
+<span class="kw">hive_no_int</span>(<span class="dt">nodes=</span>nodes,<span class="dt">links=</span>links, <span class="dt">width =</span> <span class="st">&quot;100%&quot;</span>, <span class="dt">height =</span> <span class="st">&quot;500px&quot;</span>)</code></pre></div>
+<aside class="notes">
+<ul>
+<li>Okay, not so bad.</li>
+<li>Recreating nodes is easy.</li>
+<li>Don’t want to touch js code much… make dat exact</li>
+<li>Need to loop through each prelink and create links</li>
+</ul>
+</aside>
+</section>
+<section id="non-interactive-r-output" class="slide level2">
+<h1>Non-Interactive R Output</h1>
+<div id="htmlwidget-080642de92907aa74f83" style="width:100%;height:500px;" class="hive_no_int html-widget"></div>
+<script type="application/json" data-for="htmlwidget-080642de92907aa74f83">{"x":{"nodes":{"x":[0,0,1,1,2,2,3,3,4],"y":[0.1,0.9,0.2,0.3,0.1,0.8,0.3,0.5,0.9],"color":[0,0,1,1,2,2,3,3,4]},"links":{"source":[0,1,2,2,3,4,5,6,7,8,8],"target":[2,3,4,5,5,6,7,8,8,0,1]},"numAxis":5,"options":{"innerRadius":40,"outerRadius":240,"opacity":0.7}},"evals":[],"jsHooks":[]}</script>
+<aside class="notes">
+<ul>
+<li>Cool, but first question is, why can’t I interact with it?</li>
+<li>So I do have to do some JS coding anyway.</li>
+</ul>
+</aside>
+</section>
+</section>
+<section id="finishing-touches" class="slide level2">
+<h1>Finishing Touches</h1>
+<ul>
+<li>Adding interaction</li>
+<li>Creating and sharing your package</li>
+<li>Creating R documentation using RStudio and roxygen2</li>
+<li>Adding your package to <a href="http://gallery.htmlwidgets.org/">htmlwidget gallery</a></li>
+</ul>
+<aside class="notes">
+<ul>
+<li><b>DEMO:</b> Open R code, R-help to show documentation.</li>
+<li>Show that a lot htmlwidgets reference d3.</li>
+<li>Search for ‘hive’… okay, not so original.</li>
+</ul>
+</aside>
+</section>
+<section id="section-4" class="slide level2">
+<h1></h1>
+<section class="titleslide level1">
+<h1>
+The Final Product
+</h1>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(devtools)
+<span class="kw">install_github</span>(<span class="st">&#39;nielsenmarkus11/hiveD3&#39;</span>)
+
+<span class="kw">library</span>(hiveD3)
+
+nodes =<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">id=</span><span class="kw">c</span>(<span class="dv">0</span>,<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">3</span>,<span class="dv">4</span>,<span class="dv">5</span>,<span class="dv">6</span>,<span class="dv">7</span>,<span class="dv">8</span>),
+                   <span class="dt">x=</span><span class="kw">c</span>(<span class="dv">0</span>,<span class="dv">0</span>,<span class="dv">1</span>,<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">2</span>,<span class="dv">3</span>,<span class="dv">3</span>,<span class="dv">4</span>), 
+                   <span class="dt">y=</span><span class="kw">c</span>(.<span class="dv">1</span>,.<span class="dv">9</span>,.<span class="dv">2</span>,.<span class="dv">3</span>,.<span class="dv">1</span>,.<span class="dv">8</span>,.<span class="dv">3</span>,.<span class="dv">5</span>,.<span class="dv">9</span>))
+links =<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">source=</span><span class="kw">c</span>(<span class="dv">0</span>,<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">2</span>,<span class="dv">3</span>,<span class="dv">4</span>,<span class="dv">5</span>,<span class="dv">6</span>,<span class="dv">7</span>,<span class="dv">8</span>,<span class="dv">8</span>),
+                   <span class="dt">target=</span><span class="kw">c</span>(<span class="dv">2</span>,<span class="dv">3</span>,<span class="dv">4</span>,<span class="dv">5</span>,<span class="dv">5</span>,<span class="dv">6</span>,<span class="dv">7</span>,<span class="dv">8</span>,<span class="dv">8</span>,<span class="dv">0</span>,<span class="dv">1</span>))
+
+<span class="kw">hive</span>(<span class="dt">nodes=</span>nodes,<span class="dt">links=</span>links, <span class="dt">width =</span> <span class="st">&quot;100%&quot;</span>, <span class="dt">height =</span> <span class="st">&quot;500px&quot;</span>)</code></pre></div>
+<aside class="notes">
+<ul>
+<li>I’ve added interaction</li>
+<li>I’ve created documentation</li>
+<li>I’ve shared on GitHub</li>
+</ul>
+</aside>
+</section>
+<section id="interactive-r-output" class="slide level2">
+<h1>Interactive R Output</h1>
+<div id="htmlwidget-390b02268b7781107f99" style="width:100%;height:500px;" class="hive html-widget"></div>
+<script type="application/json" data-for="htmlwidget-390b02268b7781107f99">{"x":{"nodes":{"x":[0,0,1,1,2,2,3,3,4],"y":[0.1,0.9,0.2,0.3,0.1,0.8,0.3,0.5,0.9],"color":[0,0,1,1,2,2,3,3,4]},"links":{"source":[0,1,2,2,3,4,5,6,7,8,8],"target":[2,3,4,5,5,6,7,8,8,0,1]},"numAxis":5,"options":{"innerRadius":40,"outerRadius":240,"opacity":0.7}},"evals":[],"jsHooks":[]}</script>
+<aside class="notes">
+<ul>
+<li>Next steps:</li>
+<li>CRAN? (New package or integrate into networkD3)</li>
+<li>More interactivity and flexibility!</li>
+</ul>
+</aside>
+</section>
+</section>
+<section><section id="questions" class="titleslide slide level1"><h1>Questions?</h1></section></section>
+<section><section id="references" class="titleslide slide level1"><h1>References</h1></section></section>
+    </div>
+  </div>
+
+  <script src="create-htmlwidget_files/reveal.js-3.3.0.1/lib/js/head.min.js"></script>
+  <script src="create-htmlwidget_files/reveal.js-3.3.0.1/js/reveal.js"></script>
+
+  <script>
+
+      // Full list of configuration options available at:
+      // https://github.com/hakimel/reveal.js#configuration
+      Reveal.initialize({
+        // Push each slide change to the browser history
+        history: true,
+        // Vertical centering of slides
+        center: true,
+        // Transition style
+        transition: 'default', // none/fade/slide/convex/concave/zoom
+        // Transition style for full page slide backgrounds
+        backgroundTransition: 'default', // none/fade/slide/convex/concave/zoom
+
+
+
+        // Optional reveal.js plugins
+        dependencies: [
+          { src: 'create-htmlwidget_files/reveal.js-3.3.0.1/plugin/notes/notes.js', async: true },
+        ]
+      });
+    </script>
+  <!-- dynamically load mathjax for compatibility with self-contained -->
+  <script>
+    (function () {
+      var script = document.createElement("script");
+      script.type = "text/javascript";
+      script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+      document.getElementsByTagName("head")[0].appendChild(script);
+    })();
+  </script>
+
+<script>
+  (function() {
+    if (window.jQuery) {
+      Reveal.addEventListener( 'slidechanged', function(event) {  
+        window.jQuery(event.previousSlide).trigger('hidden');
+        window.jQuery(event.currentSlide).trigger('shown');
+      });
+    }
+  })();
+</script>
+
+
+  </body>
+</html>

@@ -1,0 +1,318 @@
+---
+output: 
+  revealjs::revealjs_presentation:
+    self_contained: false
+    reveal_plugins: ["notes"]
+    theme: moon
+    highlight: tango
+    center: true
+---
+
+<section class="present">
+<h1 class="title">Creating custom htmlwidgets for shiny</h1>
+<h2 class="author">Mark Nielsen</h2>
+<aside class="notes">
+- Introduce yourself: USU, BYU, Merrick, now IHC.
+- SAS, R, Web Development, finally shiny.
+- htmlwidgets a mystery, started to understand, previously used `rCharts`.
+- Training Garrett Grolemund recommended that I look into `htmlwidgets`.
+</aside>
+</section>
+
+##
+
+<section class="titleslide level1">
+<h1>Setting Up the HTMLWidget</h1>
+
+```{r, echo=TRUE, eval=FALSE}
+devtools::create("mywidget")
+setwd("mywidget")
+htmlwidgets::scaffoldWidget("mywidget")
+devtools::install()
+```
+To learn more, see Ramnath V., Kenton R., and Rstudio's [tutorial](http://www.htmlwidgets.org/develop_intro.html) on creating htmlwidgets.
+
+<aside class="notes">
+- Ready to create your first htmlwidget?
+- Ramnath Vaidyanathan (rCharts), Kenton Russell, and RStudio
+- Increadible tutorial.
+</aside>
+
+## File Structure
+<pre><code>
+.
+├── DESCRIPTION
+├── inst
+│   └── htmlwidgets
+│       ├── mywidget.js
+│       └── mywidget.yaml
+├── mywidget.Rproj
+├── NAMESPACE
+└── R
+    └── mywidget.R
+</code></pre>
+
+<aside class="notes">
+- <b>DEMO:</b> Look at file structure in RStudio
+</aside>
+
+## R output
+```{r, eval=TRUE, echo=TRUE}
+library(mywidget)
+mywidget("Hello World")
+```
+
+<aside class="notes">
+- Vioala! Your first htmlwidget AND the classic "Hello World".
+- Pat yourself on the back.
+- We can go home!
+- <b>DEMO:</b> Let's dig into the code.
+</aside>
+
+</section>
+
+##
+
+<section class="titleslide level1">
+<h1>Adding the JS Code</h1>
+
+1. Find or develop the JS code you want to bind to R.
+2. Replace JS code in `./inst/htmlwidgets/hive.js`
+3. Copy supporting JS and CSS into `./inst/htmlwidgets/lib/` folder.
+4. Define dependencies in `./inst/htmlwidgets/hive.yaml`
+
+<aside class="notes">
+- Okay, maybe not so cool, but we can do better.
+- Find some JS code (I'm not a Web Developer)
+</aside>
+
+## Enter hive plots
+- Like the functionality and look of Mike Bostock's D3 implementation of [hive plots](https://bost.ocks.org/mike/hive/).
+- A simpler version is found [here](https://bl.ocks.org/mbostock/2066415).
+
+<aside class="notes">
+- Martin Krzysinski credited with hive plot.
+- <b>DEMO:</b> Pull code up in R and show how I split it up
+</aside>
+
+</section>
+
+##
+
+<section class="titleslide level1">
+<h1>Create the Bindings</h1>
+Goal: Get R data to look just like this.
+<pre>
+<code class="hljs" data-trim>
+var nodes = [
+  {x: 0, y: .1},
+  {x: 0, y: .9},
+  {x: 1, y: .2},
+  {x: 1, y: .3},
+  {x: 2, y: .1},
+  {x: 2, y: .8}
+];
+var links = [
+  {source: nodes[0], target: nodes[2]},
+  {source: nodes[1], target: nodes[3]},
+  {source: nodes[2], target: nodes[4]},
+  {source: nodes[2], target: nodes[5]},
+  {source: nodes[3], target: nodes[5]},
+  {source: nodes[4], target: nodes[0]},
+  {source: nodes[5], target: nodes[1]}
+];
+</code>
+</pre>
+
+<aside class="notes">
+- Now the tricky part... 
+- Get my R dataframe to look like this d3 data object.
+</aside>
+
+
+## R Code
+```{r, echo=TRUE, eval=FALSE}
+hive <- function(nodes, 
+                 links, 
+                 innerRadius = 40, 
+                 outerRadius = 240, 
+                 opacity = 0.7, 
+                 width = NULL, 
+                 height = NULL, 
+                 elementId = NULL) {
+
+  # sort in order of node id
+  if("id" %in% colnames(nodes)) {
+    nodes <- nodes[order(nodes$id),]
+    nodes$id <- NULL
+  }
+
+  # color by axis if no coloring is supplied
+  if(!("color" %in% colnames(nodes))) {
+    nodes$color <- nodes$x
+  }
+
+  # forward options using x
+  x = list(
+    nodes = nodes,
+    links = links,
+    numAxis = max(nodes$x)+1,
+    options = list(innerRadius=innerRadius,
+                   outerRadius=outerRadius,
+                   opacity=opacity)
+  )
+
+  # create widget
+  htmlwidgets::createWidget(
+    name = 'hive',
+    x,
+    width = width,
+    height = height,
+    package = 'hiveD3',
+    elementId = elementId
+  )
+}
+```
+
+<aside class="notes">
+- `nodes` and `links` are R dataframes
+- Function is passing list `x` to JS
+- Note tweaks made to dataframes based on input.
+</aside>
+
+## htmlwidgets
+<pre>
+<code class="hljs" data-trim>
+// alias options
+var options = x.options;
+
+// convert links and nodes data frames to d3 friendly format
+var nodes = HTMLWidgets.dataframeToD3(x.nodes);
+var prelinks = HTMLWidgets.dataframeToD3(x.links);
+
+// create json of link sources and targets
+var links = [];
+prelinks.forEach(function(d){
+  var tmp = {};
+  tmp.source=nodes[d.source];
+  tmp.target=nodes[d.target];
+  links.push(tmp);
+});
+</code>
+</pre>
+
+<aside class="notes">
+- Okay, not so bad.
+- Recreating nodes is easy.
+- Don't want to touch js code much... make dat exact
+- Need to loop through each prelink and create links
+</aside>
+
+</section>
+
+##
+
+<section class="titleslide level1">
+<h1>Putting it all together</h1>
+
+```{r, echo=TRUE, eval=FALSE}
+library(hiveD3)
+nodes = data.frame(id=c(0,1,2,3,4,5,6,7,8),
+                   x=c(0,0,1,1,2,2,3,3,4), 
+                   y=c(.1,.9,.2,.3,.1,.8,.3,.5,.9))
+links = data.frame(source=c(0,1,2,2,3,4,5,6,7,8,8),
+                   target=c(2,3,4,5,5,6,7,8,8,0,1))
+
+
+hive_no_int(nodes=nodes,links=links, width = "100%", height = "500px")
+```
+
+<aside class="notes">
+- Okay, not so bad.
+- Recreating nodes is easy.
+- Don't want to touch js code much... make dat exact
+- Need to loop through each prelink and create links
+</aside>
+
+## Non-Interactive R Output
+```{r, eval=TRUE, echo=FALSE}
+library(hiveD3)
+nodes = data.frame(id=c(0,1,2,3,4,5,6,7,8),
+                   x=c(0,0,1,1,2,2,3,3,4), 
+                   y=c(.1,.9,.2,.3,.1,.8,.3,.5,.9))
+links = data.frame(source=c(0,1,2,2,3,4,5,6,7,8,8),
+                   target=c(2,3,4,5,5,6,7,8,8,0,1))
+
+
+p1 <- hive_no_int(nodes=nodes,links=links, width = "100%", height = "500px")
+p1
+```
+
+<aside class="notes">
+- Cool, but first question is, why can't I interact with it?
+- So I do have to do some JS coding anyway.
+</aside>
+</section>
+
+## Finishing Touches
+- Adding interaction
+- Creating and sharing your package
+- Creating R documentation using RStudio and roxygen2
+- Adding your package to [htmlwidget gallery](http://gallery.htmlwidgets.org/)
+
+<aside class="notes">
+- <b>DEMO:</b> Open R code, R-help to show documentation.
+- <b>DEMO:</b> If time show JS code to add interactivity.
+- Show that a lot htmlwidgets reference d3.
+- Search for 'hive'... okay, not so original.
+</aside>
+##
+
+<section class="titleslide level1">
+<h1>The Final Product</h1>
+
+```{r, echo=TRUE, eval=FALSE}
+library(devtools)
+install_github('nielsenmarkus11/hiveD3')
+
+library(hiveD3)
+
+nodes = data.frame(id=c(0,1,2,3,4,5,6,7,8),
+                   x=c(0,0,1,1,2,2,3,3,4), 
+                   y=c(.1,.9,.2,.3,.1,.8,.3,.5,.9))
+links = data.frame(source=c(0,1,2,2,3,4,5,6,7,8,8),
+                   target=c(2,3,4,5,5,6,7,8,8,0,1))
+
+hive(nodes=nodes,links=links, width = "100%", height = "500px")
+```
+<aside class="notes">
+- I've added interaction
+- I've created documentation
+- I've shared on GitHub
+</aside>
+
+## Interactive R Output
+```{r, eval=TRUE, echo=FALSE}
+library(rmarkdown)
+library(hiveD3)
+
+nodes = data.frame(id=c(0,1,2,3,4,5,6,7,8),
+                   x=c(0,0,1,1,2,2,3,3,4), 
+                   y=c(.1,.9,.2,.3,.1,.8,.3,.5,.9))
+links = data.frame(source=c(0,1,2,2,3,4,5,6,7,8,8),
+                   target=c(2,3,4,5,5,6,7,8,8,0,1))
+
+p1 <- hive(nodes=nodes,links=links, width = "100%", height = "500px")
+p1
+```
+<aside class="notes">
+- Next steps:
+- CRAN? (New package or integrate into networkD3)
+- More interactivity and flexibility!
+</aside>
+</section>
+
+# Questions?
+
+# References
+
