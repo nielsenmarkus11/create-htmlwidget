@@ -559,8 +559,8 @@ devtools::<span class="kw">install</span>()</code></pre></div>
 <h1>R output</h1>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(mywidget)
 <span class="kw">mywidget</span>(<span class="st">&quot;Hello World&quot;</span>)</code></pre></div>
-<div id="htmlwidget-958153543196e87e0325" style="width:768px;height:576px;" class="mywidget html-widget"></div>
-<script type="application/json" data-for="htmlwidget-958153543196e87e0325">{"x":{"message":"Hello World"},"evals":[],"jsHooks":[]}</script>
+<div id="htmlwidget-4d0a4f2fd94ffbc6086f" style="width:768px;height:576px;" class="mywidget html-widget"></div>
+<script type="application/json" data-for="htmlwidget-4d0a4f2fd94ffbc6086f">{"x":{"message":"Hello World"},"evals":[],"jsHooks":[]}</script>
 <aside class="notes">
 <ul>
 <li>Vioala! Your first htmlwidget AND the classic “Hello World”.</li>
@@ -635,7 +635,7 @@ var links = [
 <aside class="notes">
 <ul>
 <li>Now the tricky part…</li>
-<li>Get my R dataframe to look like this.</li>
+<li>Get my R dataframe to look like this d3 data object.</li>
 </ul>
 </aside>
 </section>
@@ -643,9 +643,9 @@ var links = [
 <h1>R Code</h1>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">hive &lt;-<span class="st"> </span>function(nodes, 
                  links, 
-                 <span class="dt">innerRadius=</span><span class="dv">40</span>, 
+                 <span class="dt">innerRadius =</span> <span class="dv">40</span>, 
                  <span class="dt">outerRadius =</span> <span class="dv">240</span>, 
-                 <span class="dt">opacity=</span><span class="fl">0.7</span>, 
+                 <span class="dt">opacity =</span> <span class="fl">0.7</span>, 
                  <span class="dt">width =</span> <span class="ot">NULL</span>, 
                  <span class="dt">height =</span> <span class="ot">NULL</span>, 
                  <span class="dt">elementId =</span> <span class="ot">NULL</span>) {
@@ -683,8 +683,9 @@ var links = [
 }</code></pre></div>
 <aside class="notes">
 <ul>
-<li>Now the tricky part…</li>
-<li>Get my R dataframe to look like this.</li>
+<li><code>nodes</code> and <code>links</code> are R dataframes</li>
+<li>Function is passing list <code>x</code> to JS</li>
+<li>Note tweaks made to dataframes based on input.</li>
 </ul>
 </aside>
 </section>
@@ -692,6 +693,9 @@ var links = [
 <h1>htmlwidgets</h1>
 <pre>
 <code class="hljs" data-trim>
+// alias options
+var options = x.options;
+
 // convert links and nodes data frames to d3 friendly format
 var nodes = HTMLWidgets.dataframeToD3(x.nodes);
 var prelinks = HTMLWidgets.dataframeToD3(x.links);
@@ -733,17 +737,16 @@ links =<span class="st"> </span><span class="kw">data.frame</span>(<span class="
 <span class="kw">hive_no_int</span>(<span class="dt">nodes=</span>nodes,<span class="dt">links=</span>links, <span class="dt">width =</span> <span class="st">&quot;100%&quot;</span>, <span class="dt">height =</span> <span class="st">&quot;500px&quot;</span>)</code></pre></div>
 <aside class="notes">
 <ul>
-<li>Okay, not so bad.</li>
-<li>Recreating nodes is easy.</li>
-<li>Don’t want to touch js code much… make dat exact</li>
-<li>Need to loop through each prelink and create links</li>
+<li>All my bindings are set-up.</li>
+<li>I’ve built and loaded my package.</li>
+<li>Define some dataframes and we’re ready to test it out.</li>
 </ul>
 </aside>
 </section>
 <section id="non-interactive-r-output" class="slide level2">
 <h1>Non-Interactive R Output</h1>
-<div id="htmlwidget-080642de92907aa74f83" style="width:100%;height:500px;" class="hive_no_int html-widget"></div>
-<script type="application/json" data-for="htmlwidget-080642de92907aa74f83">{"x":{"nodes":{"x":[0,0,1,1,2,2,3,3,4],"y":[0.1,0.9,0.2,0.3,0.1,0.8,0.3,0.5,0.9],"color":[0,0,1,1,2,2,3,3,4]},"links":{"source":[0,1,2,2,3,4,5,6,7,8,8],"target":[2,3,4,5,5,6,7,8,8,0,1]},"numAxis":5,"options":{"innerRadius":40,"outerRadius":240,"opacity":0.7}},"evals":[],"jsHooks":[]}</script>
+<div id="htmlwidget-549ba54194bccf35df43" style="width:100%;height:500px;" class="hive_no_int html-widget"></div>
+<script type="application/json" data-for="htmlwidget-549ba54194bccf35df43">{"x":{"nodes":{"x":[0,0,1,1,2,2,3,3,4],"y":[0.1,0.9,0.2,0.3,0.1,0.8,0.3,0.5,0.9],"color":[0,0,1,1,2,2,3,3,4]},"links":{"source":[0,1,2,2,3,4,5,6,7,8,8],"target":[2,3,4,5,5,6,7,8,8,0,1]},"numAxis":5,"options":{"innerRadius":40,"outerRadius":240,"opacity":0.7}},"evals":[],"jsHooks":[]}</script>
 <aside class="notes">
 <ul>
 <li>Cool, but first question is, why can’t I interact with it?</li>
@@ -763,6 +766,7 @@ links =<span class="st"> </span><span class="kw">data.frame</span>(<span class="
 <aside class="notes">
 <ul>
 <li><b>DEMO:</b> Open R code, R-help to show documentation.</li>
+<li><b>DEMO:</b> If time show JS code to add interactivity.</li>
 <li>Show that a lot htmlwidgets reference d3.</li>
 <li>Search for ‘hive’… okay, not so original.</li>
 </ul>
@@ -796,8 +800,8 @@ links =<span class="st"> </span><span class="kw">data.frame</span>(<span class="
 </section>
 <section id="interactive-r-output" class="slide level2">
 <h1>Interactive R Output</h1>
-<div id="htmlwidget-390b02268b7781107f99" style="width:100%;height:500px;" class="hive html-widget"></div>
-<script type="application/json" data-for="htmlwidget-390b02268b7781107f99">{"x":{"nodes":{"x":[0,0,1,1,2,2,3,3,4],"y":[0.1,0.9,0.2,0.3,0.1,0.8,0.3,0.5,0.9],"color":[0,0,1,1,2,2,3,3,4]},"links":{"source":[0,1,2,2,3,4,5,6,7,8,8],"target":[2,3,4,5,5,6,7,8,8,0,1]},"numAxis":5,"options":{"innerRadius":40,"outerRadius":240,"opacity":0.7}},"evals":[],"jsHooks":[]}</script>
+<div id="htmlwidget-cd584b6cf6af5a76092e" style="width:100%;height:500px;" class="hive html-widget"></div>
+<script type="application/json" data-for="htmlwidget-cd584b6cf6af5a76092e">{"x":{"nodes":{"x":[0,0,1,1,2,2,3,3,4],"y":[0.1,0.9,0.2,0.3,0.1,0.8,0.3,0.5,0.9],"color":[0,0,1,1,2,2,3,3,4]},"links":{"source":[0,1,2,2,3,4,5,6,7,8,8],"target":[2,3,4,5,5,6,7,8,8,0,1]},"numAxis":5,"options":{"innerRadius":40,"outerRadius":240,"opacity":0.7}},"evals":[],"jsHooks":[]}</script>
 <aside class="notes">
 <ul>
 <li>Next steps:</li>
@@ -807,8 +811,29 @@ links =<span class="st"> </span><span class="kw">data.frame</span>(<span class="
 </aside>
 </section>
 </section>
-<section><section id="questions" class="titleslide slide level1"><h1>Questions?</h1></section></section>
-<section><section id="references" class="titleslide slide level1"><h1>References</h1></section></section>
+<section id="questions" class="slide level2">
+<h1>Questions?</h1>
+</section>
+<section id="section-5" class="slide level2">
+<h1></h1>
+<section class="titleslide level1">
+<h1>
+References
+</h1>
+<ul>
+<li><p>Bostock M, Morin R (2012). <a href="https://bost.ocks.org/mike/hive/">Hive Plots</a>. Retrieved from <a href="https://bost.ocks.org/mike/hive/" class="uri">https://bost.ocks.org/mike/hive/</a>.</p></li>
+<li><p>Bostock M (2016). <a href="https://bl.ocks.org/mbostock/2066415">Hive Plot (Links)</a>. Retrieved from <a href="https://bl.ocks.org/mbostock/2066415" class="uri">https://bl.ocks.org/mbostock/2066415</a>.</p></li>
+<li><p>Bostock M (2017). <a href="https://d3js.org/">D3 Data-Driven Documents</a>. Retrieved from <a href="https://d3js.org/" class="uri">https://d3js.org/</a>.</p></li>
+</ul>
+</section>
+<section id="references-cont." class="slide level2">
+<h1>References (cont.)</h1>
+<ul>
+<li><p>Krzywinski M, Birol I, Jones S, Marra M (2011). <a href="https://academic.oup.com/bib/article/13/5/627/412507/Hive-plots-rational-approach-to-visualizing">Hive Plots — Rational Approach to Visualizing Networks</a>. Briefings in Bioinformatics (early access 9 December 2011, doi: 10.1093/bib/bbr069).</p></li>
+<li>Vaidyanathan R, Russell K, RStudio, Inc. (2014-2015). <a href="http://www.htmlwidgets.org/develop_intro.html">Creating a widget</a>. Retrieved from <a href="http://www.htmlwidgets.org/develop_intro.html" class="uri">http://www.htmlwidgets.org/develop_intro.html</a>.</li>
+</ul>
+</section>
+</section>
     </div>
   </div>
 

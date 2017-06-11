@@ -228,10 +228,9 @@ hive_no_int(nodes=nodes,links=links, width = "100%", height = "500px")
 ```
 
 <aside class="notes">
-- Okay, not so bad.
-- Recreating nodes is easy.
-- Don't want to touch js code much... make dat exact
-- Need to loop through each prelink and create links
+- All my bindings are set-up.
+- I've built and loaded my package.
+- Define some dataframes and we're ready to test it out.
 </aside>
 
 ## Non-Interactive R Output
@@ -312,7 +311,20 @@ p1
 </aside>
 </section>
 
-# Questions?
+##
 
-# References
+<section class="titleslide level1">
+<h1>References</h1>
+- Bostock M, Morin R (2012). [Hive Plots](https://bost.ocks.org/mike/hive/). Retrieved from https://bost.ocks.org/mike/hive/.
 
+- Bostock M (2016). [Hive Plot (Links)](https://bl.ocks.org/mbostock/2066415). Retrieved from https://bl.ocks.org/mbostock/2066415.
+
+- Bostock M (2017). [D3 Data-Driven Documents](https://d3js.org/). Retrieved from https://d3js.org/.
+
+## References (cont.)
+- Krzywinski M, Birol I, Jones S, Marra M (2011). [Hive Plots — Rational Approach to Visualizing Networks](https://academic.oup.com/bib/article/13/5/627/412507/Hive-plots-rational-approach-to-visualizing). Briefings in Bioinformatics (early access 9 December 2011, doi: 10.1093/bib/bbr069).
+
+- Vaidyanathan R, Russell K, RStudio, Inc. (2014-2015). [Creating a widget](http://www.htmlwidgets.org/develop_intro.html). Retrieved from http://www.htmlwidgets.org/develop_intro.html.
+</section>
+
+## Questions?
