@@ -522,6 +522,7 @@ Mark Nielsen
 <h1>
 Setting Up the HTMLWidget
 </h1>
+<p>“The htmlwidgets package provides a framework for creating R bindings to JavaScript libraries.”</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">devtools::<span class="kw">create</span>(<span class="st">&quot;mywidget&quot;</span>)
 <span class="kw">setwd</span>(<span class="st">&quot;mywidget&quot;</span>)
 htmlwidgets::<span class="kw">scaffoldWidget</span>(<span class="st">&quot;mywidget&quot;</span>)
@@ -529,6 +530,7 @@ devtools::<span class="kw">install</span>()</code></pre></div>
 <p>To learn more, see Ramnath V., Kenton R., and Rstudio’s <a href="http://www.htmlwidgets.org/develop_intro.html">tutorial</a> on creating htmlwidgets.</p>
 <aside class="notes">
 <ul>
+<li>HTML widgets are always hosted within an R package to ensure full reproducibility.</li>
 <li>Ready to create your first htmlwidget?</li>
 <li>Ramnath Vaidyanathan (rCharts), Kenton Russell, and RStudio</li>
 <li>Increadible tutorial.</li>
@@ -551,7 +553,7 @@ devtools::<span class="kw">install</span>()</code></pre></div>
 </code></pre>
 <aside class="notes">
 <ul>
-<li><b>DEMO:</b> Look at file structure in RStudio</li>
+<li><b>DEMO:</b> Look at file structure in RStudio in next slide.</li>
 </ul>
 </aside>
 </section>
@@ -559,8 +561,8 @@ devtools::<span class="kw">install</span>()</code></pre></div>
 <h1>R output</h1>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(mywidget)
 <span class="kw">mywidget</span>(<span class="st">&quot;Hello World&quot;</span>)</code></pre></div>
-<div id="htmlwidget-ae7a904cefae50bca349" style="width:768px;height:576px;" class="mywidget html-widget"></div>
-<script type="application/json" data-for="htmlwidget-ae7a904cefae50bca349">{"x":{"message":"Hello World"},"evals":[],"jsHooks":[]}</script>
+<div id="htmlwidget-94d62df2742f3194d756" style="width:768px;height:576px;" class="mywidget html-widget"></div>
+<script type="application/json" data-for="htmlwidget-94d62df2742f3194d756">{"x":{"message":"Hello World"},"evals":[],"jsHooks":[]}</script>
 <aside class="notes">
 <ul>
 <li>Vioala! Your first htmlwidget AND the classic “Hello World”.</li>
@@ -599,7 +601,7 @@ Adding the JS Code
 <aside class="notes">
 <ul>
 <li>Martin Krzysinski credited with hive plot.</li>
-<li><b>DEMO:</b> Pull code up in R and show how I split it up</li>
+<li><b>DEMO:</b> Pull code up in web browser and show how it can be split up</li>
 </ul>
 </aside>
 </section>
@@ -610,7 +612,7 @@ Adding the JS Code
 <h1>
 Create the Bindings
 </h1>
-Goal: Get R data to look just like this.
+Goal: Get R dataframe to look just like this d3 dataset.
 <pre>
 <code class="hljs" data-trim>
 var nodes = [
@@ -635,12 +637,12 @@ var links = [
 <aside class="notes">
 <ul>
 <li>Now the tricky part…</li>
-<li>Get my R dataframe to look like this d3 data object.</li>
+<li>Get my R dataframe to look like this d3 dataset.</li>
 </ul>
 </aside>
 </section>
-<section id="r-code" class="slide level2">
-<h1>R Code</h1>
+<section id="r-binding" class="slide level2">
+<h1>R Binding</h1>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">hive &lt;-<span class="st"> </span>function(nodes, 
                  links, 
                  <span class="dt">innerRadius =</span> <span class="dv">40</span>, 
@@ -689,8 +691,9 @@ var links = [
 </ul>
 </aside>
 </section>
-<section id="htmlwidgets" class="slide level2">
-<h1>htmlwidgets</h1>
+<section id="javascript-binding" class="slide level2">
+<h1>JavaScript Binding</h1>
+For d3, we use the <code>dataframeToD3()</code> helper function:
 <pre>
 <code class="hljs" data-trim>
 // alias options
@@ -712,9 +715,9 @@ prelinks.forEach(function(d){
 </pre>
 <aside class="notes">
 <ul>
-<li>Okay, not so bad.</li>
+<li>Don’t want to touch js code much… make data exact.</li>
+<li><code>jsonlite::toJSON</code> is used to convert the dataframe to long-form representation.</li>
 <li>Recreating nodes is easy.</li>
-<li>Don’t want to touch js code much… make dat exact</li>
 <li>Need to loop through each prelink and create links</li>
 </ul>
 </aside>
@@ -743,14 +746,15 @@ links =<span class="st"> </span><span class="kw">data.frame</span>(<span class="
 </ul>
 </aside>
 </section>
-<section id="non-interactive-r-output" class="slide level2">
-<h1>Non-Interactive R Output</h1>
-<div id="htmlwidget-ad7f01a1e4c9f0788a13" style="width:100%;height:500px;" class="hive_no_int html-widget"></div>
-<script type="application/json" data-for="htmlwidget-ad7f01a1e4c9f0788a13">{"x":{"nodes":{"x":[0,0,1,1,2,2,3,3,4],"y":[0.1,0.9,0.2,0.3,0.1,0.8,0.3,0.5,0.9],"color":[0,0,1,1,2,2,3,3,4]},"links":{"source":[0,1,2,2,3,4,5,6,7,8,8],"target":[2,3,4,5,5,6,7,8,8,0,1]},"numAxis":5,"options":{"innerRadius":40,"outerRadius":240,"opacity":0.7}},"evals":[],"jsHooks":[]}</script>
+<section id="initial-r-output" class="slide level2">
+<h1>Initial R Output</h1>
+<div id="htmlwidget-b21caa0db14db5c103b7" style="width:100%;height:500px;" class="hive_no_int html-widget"></div>
+<script type="application/json" data-for="htmlwidget-b21caa0db14db5c103b7">{"x":{"nodes":{"x":[0,0,1,1,2,2,3,3,4],"y":[0.1,0.9,0.2,0.3,0.1,0.8,0.3,0.5,0.9],"color":[0,0,1,1,2,2,3,3,4]},"links":{"source":[0,1,2,2,3,4,5,6,7,8,8],"target":[2,3,4,5,5,6,7,8,8,0,1]},"numAxis":5,"options":{"innerRadius":40,"outerRadius":240,"opacity":0.7}},"evals":[],"jsHooks":[]}</script>
 <aside class="notes">
 <ul>
-<li>Cool, but first question is, why can’t I interact with it?</li>
-<li>So I do have to do some JS coding anyway.</li>
+<li>Cool, but can you guess the first question?</li>
+<li>Why can’t I interact with it?</li>
+<li>So, I do have to do some JS coding anyway.</li>
 </ul>
 </aside>
 </section>
@@ -800,12 +804,13 @@ links =<span class="st"> </span><span class="kw">data.frame</span>(<span class="
 </section>
 <section id="interactive-r-output" class="slide level2">
 <h1>Interactive R Output</h1>
-<div id="htmlwidget-d8d51903e5f37c93bd94" style="width:100%;height:500px;" class="hive html-widget"></div>
-<script type="application/json" data-for="htmlwidget-d8d51903e5f37c93bd94">{"x":{"nodes":{"x":[0,0,1,1,2,2,3,3,4],"y":[0.1,0.9,0.2,0.3,0.1,0.8,0.3,0.5,0.9],"color":[0,0,1,1,2,2,3,3,4]},"links":{"source":[0,1,2,2,3,4,5,6,7,8,8],"target":[2,3,4,5,5,6,7,8,8,0,1]},"numAxis":5,"options":{"innerRadius":40,"outerRadius":240,"opacity":0.7}},"evals":[],"jsHooks":[]}</script>
+<div id="htmlwidget-5034e9004ee8a427d7cc" style="width:100%;height:500px;" class="hive html-widget"></div>
+<script type="application/json" data-for="htmlwidget-5034e9004ee8a427d7cc">{"x":{"nodes":{"x":[0,0,1,1,2,2,3,3,4],"y":[0.1,0.9,0.2,0.3,0.1,0.8,0.3,0.5,0.9],"color":[0,0,1,1,2,2,3,3,4]},"links":{"source":[0,1,2,2,3,4,5,6,7,8,8],"target":[2,3,4,5,5,6,7,8,8,0,1]},"numAxis":5,"options":{"innerRadius":40,"outerRadius":240,"opacity":0.7}},"evals":[],"jsHooks":[]}</script>
 <aside class="notes">
 <ul>
 <li>Next steps:</li>
 <li>CRAN? (New package or integrate into networkD3)</li>
+<li>Specify sizing behavior in container.</li>
 <li>More interactivity and flexibility!</li>
 </ul>
 </aside>

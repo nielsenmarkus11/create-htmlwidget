@@ -24,6 +24,7 @@ output:
 <section class="titleslide level1">
 <h1>Setting Up the HTMLWidget</h1>
 
+"The htmlwidgets package provides a framework for creating R bindings to JavaScript libraries."
 ```{r, echo=TRUE, eval=FALSE}
 devtools::create("mywidget")
 setwd("mywidget")
@@ -33,6 +34,7 @@ devtools::install()
 To learn more, see Ramnath V., Kenton R., and Rstudio's [tutorial](http://www.htmlwidgets.org/develop_intro.html) on creating htmlwidgets.
 
 <aside class="notes">
+- HTML widgets are always hosted within an R package to ensure full reproducibility.
 - Ready to create your first htmlwidget?
 - Ramnath Vaidyanathan (rCharts), Kenton Russell, and RStudio
 - Increadible tutorial.
@@ -53,7 +55,7 @@ To learn more, see Ramnath V., Kenton R., and Rstudio's [tutorial](http://www.ht
 </code></pre>
 
 <aside class="notes">
-- <b>DEMO:</b> Look at file structure in RStudio
+- <b>DEMO:</b> Look at file structure in RStudio in next slide.
 </aside>
 
 ## R output
@@ -92,7 +94,7 @@ mywidget("Hello World")
 
 <aside class="notes">
 - Martin Krzysinski credited with hive plot.
-- <b>DEMO:</b> Pull code up in R and show how I split it up
+- <b>DEMO:</b> Pull code up in web browser and show how it can be split up
 </aside>
 
 </section>
@@ -101,7 +103,7 @@ mywidget("Hello World")
 
 <section class="titleslide level1">
 <h1>Create the Bindings</h1>
-Goal: Get R data to look just like this.
+Goal: Get R dataframe to look just like this d3 dataset.
 <pre>
 <code class="hljs" data-trim>
 var nodes = [
@@ -126,11 +128,11 @@ var links = [
 
 <aside class="notes">
 - Now the tricky part... 
-- Get my R dataframe to look like this d3 data object.
+- Get my R dataframe to look like this d3 dataset.
 </aside>
 
 
-## R Code
+## R Binding
 ```{r, echo=TRUE, eval=FALSE}
 hive <- function(nodes, 
                  links, 
@@ -180,7 +182,8 @@ hive <- function(nodes,
 - Note tweaks made to dataframes based on input.
 </aside>
 
-## htmlwidgets
+## JavaScript Binding
+For d3, we use the `dataframeToD3()` helper function:
 <pre>
 <code class="hljs" data-trim>
 // alias options
@@ -202,9 +205,9 @@ prelinks.forEach(function(d){
 </pre>
 
 <aside class="notes">
-- Okay, not so bad.
+- Don't want to touch js code much... make data exact.
+- `jsonlite::toJSON` is used to convert the dataframe to long-form representation.
 - Recreating nodes is easy.
-- Don't want to touch js code much... make dat exact
 - Need to loop through each prelink and create links
 </aside>
 
@@ -233,7 +236,7 @@ hive_no_int(nodes=nodes,links=links, width = "100%", height = "500px")
 - Define some dataframes and we're ready to test it out.
 </aside>
 
-## Non-Interactive R Output
+## Initial R Output
 ```{r, eval=TRUE, echo=FALSE}
 library(hiveD3)
 nodes = data.frame(id=c(0,1,2,3,4,5,6,7,8),
@@ -248,8 +251,9 @@ p1
 ```
 
 <aside class="notes">
-- Cool, but first question is, why can't I interact with it?
-- So I do have to do some JS coding anyway.
+- Cool, but can you guess the first question?
+- Why can't I interact with it?
+- So, I do have to do some JS coding anyway.
 </aside>
 </section>
 
@@ -307,6 +311,7 @@ p1
 <aside class="notes">
 - Next steps:
 - CRAN? (New package or integrate into networkD3)
+- Specify sizing behavior in container.
 - More interactivity and flexibility!
 </aside>
 </section>
